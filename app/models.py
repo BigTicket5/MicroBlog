@@ -3,7 +3,7 @@ Created on 2014-5-23
 
 @author: KEVIN
 '''
-from sqlalchemy import Column, Integer, String,SmallInteger
+from sqlalchemy import Column, Integer, String,SmallInteger,DateTime
 from app.database import Base
 ROLE_USER = 0
 ROLE_ADMIN = 1
@@ -14,6 +14,7 @@ class User(Base):
     email = Column(String(120), unique=True, index = True)
     role = Column(SmallInteger,default =  ROLE_USER)
     about_me = Column(String(140))
+    last_seen = Column(DateTime)
     def __init__(self, nickname=None, email= None , role = ROLE_USER ):
         self.nickname = nickname
         self.email = email
@@ -28,6 +29,9 @@ class User(Base):
         return True
     def get_id(self):
         return (self.id)
+    def time2date(self):
+        last_day = self.last_seen.strftime("%Y-%m-%d")
+        return last_day
   
     
 

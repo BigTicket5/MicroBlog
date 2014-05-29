@@ -2,9 +2,10 @@
 
 {% block content %}
 
-<h1>user NickNAME: {{user.nickname}}!</h1>
+<h1>User NickNAME: {{user.nickname}}!</h1>
 {% if user.about_me %}<p>{{user.about_me}}</p>{% endif %}
-{% if user.last_seen %}<p><i>Last seen on: {{user.last_seen}}</i></p>{% endif %}
+{% if user.last_seen %}<p><i>Last seen on: {{user.time2date()}}</i></p>{% endif %}
+{% if user.id == g.user.id %}<p><a href="{{url_for('edit')}}">Update Yourself</a></p>{% endif %}
 <hr>
 {% for post in posts%}
 <p>

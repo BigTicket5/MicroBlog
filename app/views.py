@@ -7,7 +7,7 @@ Created on 2014
 from flask import render_template,flash,redirect,session, url_for,g
 from flask_login import  login_user, logout_user, current_user, login_required
 from app import app,oid,lm
-from app.forms import LoginForm
+from app.forms import LoginForm,EditForm
 from app.models import User, ROLE_USER, ROLE_ADMIN
 from app.database import db_session
 from datetime import datetime
@@ -21,7 +21,6 @@ def before_request():
         g.user.last_seen = datetime.utcnow()
         db_session.add(g.user)  
         db_session.commit()
-        print(list(db_session.query(g.user)))
 
 @app.route('/')
 @app.route('/index')
@@ -63,6 +62,7 @@ def after_login(resp):
     return redirect(url_for('index'))
 
 @app.route('/user/<nickname>')
+@login_required
 def user(nickname):
     user = User.query.filter(nickname == nickname).first()
     if user == None:
@@ -73,6 +73,23 @@ def user(nickname):
         { 'author': user, 'body': 'Test post #2' }
     ]
     return  render_template('user.html',user=user,posts=posts)
+
+@app.route('/edit',methods = ['GET','POST'])
+@login_required
+def edit():
+    form = EditForm()
+    if form.validate_on_submit():
+        g.user.nickname = form.nickname.data
+        g.user.about_me = form.about_me.data
+        db_session.add(g.user)
+        db_session.commit()
+        flash('Your changes have been saved')
+        return redirect(url_for('edit'))
+    else:
+        form.nickname.data = g.user.nickname
+        form.about_me.data = g.user.about_me
+    return render_template('edit.html', form=form)
+
 
 
 @app.route('/logout')
