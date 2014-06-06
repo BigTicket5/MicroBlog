@@ -32,6 +32,17 @@ class User(Base):
     def time2date(self):
         last_day = self.last_seen.strftime("%Y-%m-%d")
         return last_day
+    @staticmethod
+    def make_unique_nickname(nickname):
+        if User.query.filter(nickname = nickname).first() ==None:
+            return nickname
+        version =2
+        while True:
+            new_nickname = nickname +str(version)
+            if User.query.filter(nickname = new_nickname).first() ==None:
+                break
+            version +=1
+        return new_nickname
   
     
 
