@@ -2,7 +2,7 @@ import os
 from flask import Flask
 from flask_login import LoginManager
 from flask_openid import OpenID
-from app.config import basedir,ADMINS,MAIL_SERVER,MAIL_PORT,MAIL_USERNAME,MAIL_PASSWORD
+from config import basedir,ADMINS,MAIL_SERVER,MAIL_PORT,MAIL_USERNAME,MAIL_PASSWORD
 
 app = Flask(__name__)
 app.config.from_object('config')
